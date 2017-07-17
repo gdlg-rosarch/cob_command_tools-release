@@ -88,6 +88,8 @@ from cob_sound.msg import *
 from cob_script_server.msg import *
 from cob_light.msg import LightMode, LightModes, SetLightModeGoal, SetLightModeAction
 from cob_mimic.msg import SetMimicGoal, SetMimicAction
+from actionlib.msg import TestAction, TestGoal
+from actionlib import GoalStatus
 
 graph=""
 graph_wait_list=[]
@@ -314,6 +316,57 @@ class simple_script_server:
 			ah.set_succeeded() # full success
 		return ah
 
+	## Allows to trigger actions of the type actionlib/TestAction
+	#
+	# Based on the component and action name, the corresponding ActionServer will be called.
+	#
+	# \param component_name Name of the component.
+	# \param action_name Name of the action.
+	# \param blocking Whether to wait for the Action to return.
+	def trigger_action(self,component_name,action_name,blocking=True):
+		ah = action_handle(action_name, component_name, "", blocking, self.parse)
+		if(self.parse):
+			return ah
+		else:
+			ah.set_active(mode="action")
+
+		rospy.loginfo("<<%s>> <<%s>>", action_name, component_name)
+		#parameter_name = self.ns_global_prefix + "/" + component_name + "/service_ns"
+		#if not rospy.has_param(parameter_name):
+			#message = "Parameter " + parameter_name + " does not exist on ROS Parameter Server, aborting..."
+			#rospy.logerr(message)
+			#ah.set_failed(2, message)
+			#return ah
+		#service_ns_name = rospy.get_param(parameter_name)
+		action_full_name = "/" + component_name + "/" + action_name
+		action_client = actionlib.SimpleActionClient(action_full_name, TestAction)
+
+		if blocking:
+			# check if action is available
+			if not action_client.wait_for_server(rospy.Duration(1)):
+				message = "ActionServer %s is not running"%action_full_name
+				rospy.logerr(message)
+				ah.set_failed(4, message)
+				return ah
+
+		# call the action
+		if blocking:
+			rospy.loginfo("Wait for <<%s>> to <<%s>>...", component_name, action_name)
+			goal_state = action_client.send_goal_and_wait(TestGoal())
+			if not (action_client.get_state() == GoalStatus.SUCCEEDED):
+				message = "...state of <<" + action_name + ">> of <<" + component_name + ">> : " + GoalStatus.to_string(action_client.get_state())
+				rospy.logerr(message)
+				ah.set_failed(10, message)
+				return ah
+		else:
+			action_client.send_goal(TestGoal())
+
+		# full success
+		rospy.loginfo("...<<%s>> is <<%s>>", component_name, action_name)
+		ah.set_succeeded() # full success
+		return ah
+
+
 #------------------- Move section -------------------#
 	## Deals with all kind of movements for different components.
 	#
@@ -325,8 +378,6 @@ class simple_script_server:
 	def move(self,component_name,parameter_name,blocking=True, mode=None):
 		if component_name == "base":
 			return self.move_base(component_name,parameter_name,blocking, mode)
-		elif component_name == "arm" and mode=="planned":
-			return self.move_planned(component_name,parameter_name,blocking)
 		else:
 			return self.move_traj(component_name,parameter_name,blocking)
 
@@ -566,8 +617,13 @@ class simple_script_server:
 		return (traj_msg, 0)
 
 	def calculate_point_time(self, component_name, start_pos, end_pos, default_vel):
-		d_max = max(list(abs(numpy.array(start_pos) - numpy.array(end_pos))))
-		point_time = d_max / default_vel
+		try:
+			d_max = max(list(abs(numpy.array(start_pos) - numpy.array(end_pos))))
+			point_time = max(d_max / default_vel, 0.4)	# use minimal point_time
+		except ValueError as e:
+			print "Value Error", e
+			print "Likely due to mimic joints. Using default point_time: 3.0 [sec]"
+			point_time = 3.0	# use default point_time
 		return point_time
 
 	## Deals with all kind of trajectory movements for different components.
@@ -1134,6 +1190,8 @@ class action_handle:
 	def get_state(self):
 		if self.client_mode != "": # not processing an actionlib client
 			return self.client_state
+		elif self.client == None:
+			return None
 		else:
 			return self.client.get_state()
 
