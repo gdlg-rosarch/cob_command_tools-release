@@ -1,3 +1,36 @@
+## cob_command_tools (indigo) - 0.6.6-0
+
+The packages in the `cob_command_tools` repository were released into the `indigo` distro by running `/usr/bin/bloom-release cob_command_tools --track indigo --rosdistro indigo` on `Mon, 17 Jul 2017 15:05:41 -0000`
+
+These packages were released:
+- `cob_command_gui`
+- `cob_command_tools`
+- `cob_dashboard`
+- `cob_helper_tools`
+- `cob_interactive_teleop`
+- `cob_monitoring`
+- `cob_script_server`
+- `cob_teleop`
+- `generic_throttle`
+- `service_tools`
+
+Version of package(s) in repository `cob_command_tools`:
+
+- upstream repository: https://github.com/ipa320/cob_command_tools.git
+- release repository: https://github.com/ipa320/cob_command_tools-release.git
+- rosdistro version: `0.6.5-0`
+- old version: `0.6.5-1`
+- new version: `0.6.6-0`
+
+Versions of tools used:
+
+- bloom version: `0.5.26`
+- catkin_pkg version: `0.3.5`
+- rosdep version: `0.11.5`
+- rosdistro version: `0.6.2`
+- vcstools version: `0.1.39`
+
+
 ## cob_command_tools (indigo) - 0.6.5-1
 
 The packages in the `cob_command_tools` repository were released into the `indigo` distro by running `/usr/bin/bloom-release cob_command_tools --track indigo --rosdistro indigo` on `Mon, 17 Jul 2017 14:19:51 -0000`
