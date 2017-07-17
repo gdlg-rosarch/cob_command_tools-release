@@ -36,10 +36,10 @@ install(DIRECTORY common launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-install(PROGRAMS src/cob_console src/cob_console.py src/script_server.py src/script_to_graph.py src/script_viewer.py src/xdot.py
+install(PROGRAMS src/cob_console src/script_server.py src/script_to_graph.py src/script_viewer.py src/xdot.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/src
 )
 
-install(PROGRAMS test/action_interface.py test/move.py test/python_api.py test/test_say.py test/test_script.py test/trigger.py
+install(PROGRAMS test/test_action_interface.py test/test_move.py test/test_python_api.py test/test_say.py test/test_trigger.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/test
 )
