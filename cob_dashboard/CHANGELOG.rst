@@ -2,6 +2,16 @@
 Changelog for package cob_dashboard
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.6.6 (2017-07-17)
+------------------
+* dual distro compatibility for qt
+* rospy.sleep exception handling
+* manually fix changelog
+* Contributors: ipa-fxm
+
+0.6.5 (2016-10-10)
+------------------
+
 0.6.4 (2016-04-01)
 ------------------
 * use aggregated power message
@@ -15,20 +25,6 @@ Changelog for package cob_dashboard
 * sort dependencies
 * critically review dependencies
 * Contributors: ipa-fxm
-
-0.6.5 (2016-10-10)
-------------------
-* 0.6.4
-* update changelog
-* use aggregated power message
-* 0.6.3
-* update changelog
-* remove trailing whitespaces
-* remove trailing whitespaces
-* migrate to package format 2
-* sort dependencies
-* critically review dependencies
-* Contributors: ipa-fmw, ipa-fxm
 
 0.6.2 (2015-06-17)
 ------------------
