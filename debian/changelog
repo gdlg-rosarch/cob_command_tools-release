@@ -1,8 +1,0 @@
-ros-kinetic-service-tools (0.6.6-0jessie) jessie; urgency=high
-
-  * implemented service_relay
-  * Contributors: Mathias Lüdtke
-
- -- Florian Weisshardt <fmw@ipa.fhg.de>  Sun, 16 Jul 2017 22:00:00 -0000
-
-
